@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur{% endblock %}
+
+{% block body %}
+<div class="row ">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+    <h1>Utilisateur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ utilisateur.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ utilisateur.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ utilisateur.prenom }}</td>
+            </tr>
+            <tr>
+                <th>DateNaissance</th>
+                <td>{{ utilisateur.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ utilisateur.adresse }}</td>
+            </tr>
+            <tr>
+                <th>NumTel</th>
+                <td>{{ utilisateur.numTel }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ utilisateur.email }}</td>
+            </tr>
+            <tr>
+                <th>Mdp</th>
+                <td>{{ utilisateur.mdp }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ utilisateur.type }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ utilisateur.description }}</td>
+            </tr>
+            <tr>
+                <th>Evaluation</th>
+                <td>{{ utilisateur.evaluation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+{#     <a href="{{ path('app_utilisateur_index') }}">back to list</a>
+#}
+    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">edit</a>
+    <a href="{{ path('app_commentaire_new', {'id': utilisateur.id}) }}">comment</a>
+
+
+
+    {{ include('utilisateur/_delete_form.html.twig') }}
+            </div>
+            <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+
+{% endblock %}
