@@ -13,47 +13,41 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ utilisateur.id }}</td>
+                <td>{{ app.user.id}}</td>
             </tr>
             <tr>
                 <th>Nom</th>
-                <td>{{ utilisateur.nom }}</td>
+                <td>{{ app.user.nom }}</td>
             </tr>
             <tr>
                 <th>Prenom</th>
-                <td>{{ utilisateur.prenom }}</td>
+                <td>{{ app.user.prenom }}</td>
             </tr>
             <tr>
                 <th>DateNaissance</th>
-                <td>{{ utilisateur.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ app.user.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
                 <th>Adresse</th>
-                <td>{{ utilisateur.adresse }}</td>
+                <td>{{ app.user.adresse }}</td>
             </tr>
             <tr>
                 <th>NumTel</th>
-                <td>{{ utilisateur.numTel }}</td>
+                <td>{{ app.user.numTel }}</td>
             </tr>
             <tr>
                 <th>Email</th>
-                <td>{{ utilisateur.email }}</td>
+                <td>{{ app.user.email }}</td>
             </tr>
-            <tr>
-                <th>Mdp</th>
-                <td>{{ utilisateur.mdp }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ utilisateur.type }}</td>
-            </tr>
+
+
             <tr>
                 <th>Description</th>
-                <td>{{ utilisateur.description }}</td>
+                <td>{{ app.user.description }}</td>
             </tr>
             <tr>
                 <th>Evaluation</th>
-                <td>{{ utilisateur.evaluation }}</td>
+                <td>{{ app.user.evaluation }}</td>
             </tr>
         </tbody>
     </table>

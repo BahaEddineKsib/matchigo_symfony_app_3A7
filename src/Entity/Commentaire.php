@@ -59,6 +59,40 @@ class Commentaire
      */
     private $plan;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Commentaire::class, inversedBy="replies")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="idComm")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="parent")
+     */
+    private $replies;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommentLike::class, mappedBy="comm")
+     */
+    private $likes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommentDislike::class, mappedBy="comm")
+     */
+    private $dislikes;
+
+    public function __construct()
+    {
+        $this->replies = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->dislikes = new ArrayCollection();
+    }
+
+
+
+
+
+
+
 
 
 
@@ -70,10 +104,7 @@ class Commentaire
     {
         return $this->idcomm;
     }
-// Register Magic Method to Print the name of the State e.g California
-    public function __toString() {
-        return $this->idclient;
-    }
+
     /**
      * @param int $idcomm
      */
@@ -165,6 +196,141 @@ class Commentaire
 
         return $this;
     }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getReplies(): Collection
+    {
+        return $this->replies;
+    }
+
+    public function addReply(self $reply): self
+    {
+        if (!$this->replies->contains($reply)) {
+            $this->replies[] = $reply;
+            $reply->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReply(self $reply): self
+    {
+        if ($this->replies->removeElement($reply)) {
+            // set the owning side to null (unless already changed)
+            if ($reply->getParent() === $this) {
+                $reply->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentLike>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(CommentLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setComm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(CommentLike $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getComm() === $this) {
+                $like->setComm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Utilisateur $utilisateur
+     * @return bool
+     */
+public function isLikedByUser(Utilisateur $utilisateur):bool
+{
+    foreach ($this->likes as $like)
+    {
+        if($like->getUser()== $utilisateur) return true;
+    }
+    return false;
+}
+
+
+
+    /**
+     * @param Utilisateur $utilisateur
+     * @return bool
+     */
+    public function isDislikedByUser(Utilisateur $utilisateur):bool
+    {
+        foreach ($this->dislikes as $dislike)
+        {
+            if($dislike->getUser()== $utilisateur) return true;
+        }
+        return false;
+    }
+/**
+ * @return Collection<int, CommentDislike>
+ */
+public function getDislikes(): Collection
+{
+    return $this->dislikes;
+}
+
+public function addDislike(CommentDislike $dislike): self
+{
+    if (!$this->dislikes->contains($dislike)) {
+        $this->dislikes[] = $dislike;
+        $dislike->setComm($this);
+    }
+
+    return $this;
+}
+
+public function removeDislike(CommentDislike $dislike): self
+{
+    if ($this->dislikes->removeElement($dislike)) {
+        // set the owning side to null (unless already changed)
+        if ($dislike->getComm() === $this) {
+            $dislike->setComm(null);
+        }
+    }
+
+    return $this;
+}
+
+
+
+
+
+
 
 
 

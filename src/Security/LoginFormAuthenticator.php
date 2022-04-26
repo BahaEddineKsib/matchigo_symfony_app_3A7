@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,13 +32,20 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $requestStack;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+
+
+    public function __construct(RequestStack $requestStack,EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->requestStack = $requestStack;
+
+
+
     }
 
     public function supports(Request $request)
@@ -49,10 +57,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('email'),
-            'password' => $request->request->get('password'),
+            'email' => $request->get('email'),
+            'password' => $request->get('password'),
 
-            'csrf_token' => $request->request->get('_csrf_token'),
+            'csrf_token' => $request->get('_csrf_token'),
         ];
 
         $request->getSession()->set(
@@ -103,9 +111,30 @@ dd($credentials['password']);
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
+        $user= $token->getUser();
 
-         return new RedirectResponse($this->urlGenerator->generate('app_commentaire_new'));
+        if(in_array('ROLE_ADMIN',$user->getRoles(),true))
+        {
+            return new RedirectResponse($this->urlGenerator->generate('app_utilisateur_index'));
+
+        }
+        elseif(in_array('ROLE_USER',$user->getRoles(),true))
+        {
+            $session = $request->getSession();
+
+
+            return new RedirectResponse($this->urlGenerator->generate('app_utilisateur_showf',['id' => $session->get('id')], Response::HTTP_SEE_OTHER));
+
+        }
+        else
+        {
+            return new RedirectResponse($this->urlGenerator->generate('app_commentaire_new'));
+
+        }
+
+
        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+
     }
 
     protected function getLoginUrl()

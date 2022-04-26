@@ -109,14 +109,14 @@
                                     <label class="radio-container"><br>Guide
                                         #}
                                         {# <input type="radio" name="role"> #}
-                                        {{ form_widget(form.type,{'attr':{'class':'' ,'placeholder':'Role'}}) }}
+                                        {{ form_widget(form.roles,{'attr':{'class':'' ,'placeholder':'Role'}}) }}
 
 
 
                                     <span class="checkmark"></span>
 
                                     </label>
-                                    {{ form_errors(form.type,{'attr':{'class': 'text-danger'}}) }}
+                                    {{ form_errors(form.roles,{'attr':{'class': 'text-danger'}}) }}
 
                                 </div>
 
@@ -154,7 +154,9 @@
 
                         {{ form_end(form) }}
                        {# </form>#}
-                        <p>I'm already a member! <a data-toggle="tab" href="">Sign In</a></p>
+
+
+                        <p>I'm already a member!  <a href="{{ path('app_login') }}">login</a></p>
                     </div>
                 </div>
             </div>

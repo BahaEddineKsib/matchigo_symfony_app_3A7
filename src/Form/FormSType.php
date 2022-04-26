@@ -57,11 +57,11 @@ class FormSType extends AbstractType
             ->add('email',TextType::class, [
                 'constraints' => new NotBlank(),
             ])
-            ->add('type', ChoiceType::class, [
+           /* ->add('type', ChoiceType::class, [
                 'label' => 'Role',
                 'choices' => [
-                    'Guide'=>'guide' ,
-                    'Simple User'=>'simple User' ,
+                    'Guide'=>'ROLE_GUIDE' ,
+                    'Simple User'=>'ROLE_USER' ,
 
                 ],
                 'constraints' => [
@@ -71,6 +71,17 @@ class FormSType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false
+            ])*/
+
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Guide' => 'ROLE_GUIDE',
+
+                ],
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Rôles'
             ])
 
 

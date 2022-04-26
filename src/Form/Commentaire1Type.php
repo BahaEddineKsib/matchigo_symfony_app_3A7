@@ -9,6 +9,7 @@ use App\Entity\Utilisateur;
 use Doctrine\DBAL\Types\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -22,7 +23,9 @@ class Commentaire1Type extends AbstractType
         $builder
 
             ->add('contenu',TextareaType::class)
-
+            ->add('parentid',HiddenType::class,[
+                'mapped'=>false
+            ])
             ->add('plan',EntityType::class,[
                 'class'=>Plan::class,
                 'choice_label'=>'id'

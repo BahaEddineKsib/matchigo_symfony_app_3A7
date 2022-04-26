@@ -83,28 +83,22 @@
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Role</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(form.type,{'attr':{'class':'form-control' ,'placeholder':'Votre role'}}) }}
-                            </div>
-                        </div>
-                    </div>
+
 
 
                 </div>
-                <div class="row">
+                {#   <div class="row">
                     <div class="col-md-6">
                         <div class="form-group row">
+
+
                             <label class="col-sm-3 col-form-label">Mot de passe</label>
                             <div class="col-sm-9">
                                 {{ form_widget(form.mdp,{'attr':{'type':'password','class':'passwordType' ,'placeholder':'Password'}}) }}
                             </div>
                         </div>
                     </div>
-
+                           #}
 
                 </div>
                 <button class="form-control btn btn-primary submit px-3">{{ button_label|default('Save') }}</button>
@@ -114,7 +108,7 @@
         </div>
     </div>
 
-    <a href="{{ path('app_utilisateur_showf',{'id': utilisateur.id}) }}">back to list</a>
+    <a href="{{ path('app_utilisateur_showf',{'id': app.user.id}) }}">back to list</a>
 
     {{ include('utilisateur/_delete_form.html.twig') }}
 {% endblock %}

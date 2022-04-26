@@ -3,10 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Commentaire;
+use App\Entity\CommentDislike;
+use App\Entity\CommentLike;
 use App\Form\Commentaire1Type;
 use App\Form\CommentaireType;
+use App\Repository\CommentDislikeRepository;
 
+use App\Repository\CommentLikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,12 +62,22 @@ $commentaire->setIdclient($user);
  $commentaire->setDatePost(new \DateTime('now'));
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /// on recupere le contenu du champ parentid
+            $parentid=$form->get('parentid')->getData();
+
+            //on va chercher le comm corresp
+            $parent=$entityManager->getRepository(Commentaire::class)->find($parentid);
+           //on definit le parent
+            $commentaire->setParent($parent);
+            ///////////////
+
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_commentaire_new', [], Response::HTTP_SEE_OTHER);
-        }
 
+        }
+$this->addFlash('message','Votre commentaire a été bien posté');
         return $this->render('commentaire/new.html.twig', [
             'commentaire' => $commentaire,
             'commentaires' => $commentaires,
@@ -113,4 +128,113 @@ $commentaire->setIdclient($user);
 
         return $this->redirectToRoute('app_commentaire_new', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     *
+     * @Route ("/{comm}/like",name="commentaire_like")
+     * @param Commentaire $comm
+     * @param ObjectManager $manager
+     * @param CommentLikeRepository $commentLikeRepository
+     * @return Response
+     */
+
+    public function like(Commentaire $comm,EntityManagerInterface $manager,CommentLikeRepository $commentLikeRepository):Response
+    {
+        $user=$this->getUser();
+        if(!$user) return $this->json([
+            'code'=>403,
+            'message'=>"unauthorized"
+        ],403);
+////dans le cas ou un commentaire est liké par un user
+if($comm->isLikedByUser($user))
+{
+    ////alors on enleve le like suppression
+    $like=$commentLikeRepository->findOneBy([
+        'comm'=>$comm,
+        'user'=>$user
+    ]);
+    $manager->remove($like);
+    $manager->flush();
+
+    return $this->json([
+        'code'=>200,
+        'message'=> 'like supprimé',
+        'likes'=> $commentLikeRepository->count(['comm'=>$comm])
+    ],200);
+
+
+
+
+}
+////nouveau like//////
+$like=new CommentLike();
+$like->setComm($comm)
+    ->setUser($user);
+$manager->persist($like);
+$manager->flush();
+
+return $this->json(['code'=>200,
+    'message'=>'like bien ajoute',
+    'likes'=>$commentLikeRepository->count(['comm'=>$comm])
+],200);
+
+    }
+
+
+
+
+
+    /**
+     *
+     * @Route ("/{comm}/dislike",name="commentaire_dislike")
+     * @param Commentaire $comm
+     * @param ObjectManager $manager
+     * @param CommentDislikeRepository $commentDislikeRepository
+     * @return Response
+     */
+
+    public function dislike(Commentaire $comm,EntityManagerInterface $manager,CommentDislikeRepository $commentDislikeRepository):Response
+    {
+        $user=$this->getUser();
+        if(!$user) return $this->json([
+            'code'=>403,
+            'message'=>"unauthorized"
+        ],403);
+////dans le cas ou un commentaire est liké par un user
+        if($comm->isDislikedByUser($user))
+        {
+            ////alors on enleve le like suppression
+            $dislike=$commentDislikeRepository->findOneBy([
+                'comm'=>$comm,
+                'user'=>$user
+            ]);
+            $manager->remove($dislike);
+            $manager->flush();
+
+            return $this->json([
+                'code'=>200,
+                'message'=> 'like supprimé',
+                'dislikes'=> $commentDislikeRepository->count(['comm'=>$comm])
+            ],200);
+
+
+
+
+        }
+////nouveau like//////
+        $dislike=new CommentDislike();
+        $dislike->setComm($comm)
+            ->setUser($user);
+        $manager->persist($dislike);
+        $manager->flush();
+
+        return $this->json(['code'=>200,
+            'message'=>'dislike bien ajoute',
+            'dislikes'=>$commentDislikeRepository->count(['comm'=>$comm])
+        ],200);
+
+    }
+
+
+
 }
