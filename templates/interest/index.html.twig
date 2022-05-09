@@ -1,0 +1,43 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Interest index{% endblock %}
+
+{% block body %}
+    <h1>Interest index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdIntrest</th>
+                <th>Sport</th>
+                <th>History</th>
+                <th>Food</th>
+                <th>Health</th>
+                <th>Score</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for interest in interests %}
+            <tr>
+                <td>{{ interest.idIntrest }}</td>
+                <td>{{ interest.sport }}</td>
+                <td>{{ interest.history ? 'Yes' : 'No' }}</td>
+                <td>{{ interest.food ? 'Yes' : 'No' }}</td>
+                <td>{{ interest.health ? 'Yes' : 'No' }}</td>
+                <td>{{ interest.score }}</td>
+                <td>
+                    <a href="{{ path('app_interest_show', {'idIntrest': interest.idIntrest}) }}">show</a>
+                    <a href="{{ path('app_interest_edit', {'idIntrest': interest.idIntrest}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_interest_new') }}">Create new</a>
+{% endblock %}
