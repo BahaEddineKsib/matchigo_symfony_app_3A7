@@ -1,0 +1,6 @@
+[0515/224758.832:WARNING:dns_config_service_win.cc(700)] Failed to read DnsConfig.
+[0515/224758.832:WARNING:dns_config_service_win.cc(700)] Failed to read DnsConfig.
+[0515/224803.854:WARNING:dns_config_service_win.cc(700)] Failed to read DnsConfig.
+[0515/224803.878:WARNING:dns_config_service_win.cc(700)] Failed to read DnsConfig.
+[0515/225540.813:ERROR:browser_host_impl.cc(1691)] Invalid URL passed to CefBrowserHostImpl::LoadMainFrameURL: 127.0.0.1:8000/reservation/new
+[0515/225613.945:ERROR:browser_host_impl.cc(1691)] Invalid URL passed to CefBrowserHostImpl::LoadMainFrameURL: 127.0.0.1:8000/reservation/new
